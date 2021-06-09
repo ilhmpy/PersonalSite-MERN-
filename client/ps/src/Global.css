@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+button, textarea, input {
+  outline: none;
+  border: 0;
+  background: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1170px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.black_bg {
+  width: 100%;
+  padding-top: 800px;
+  position: absolute;
+  height: 1700px;
+  background: rgba(0, 0, 0, 60%);
+}
+
+@media only screen and (min-device-width: 2300px) {
+  .black_bg {
+    height: 1800px;
+  }
+}
