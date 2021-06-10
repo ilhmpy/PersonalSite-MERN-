@@ -49,6 +49,32 @@ export default function Main() {
           <h1><span>Мои</span> преимущества</h1>
           <p>Здесь вы можете увидеть мои преимущества перед другими в работе над вашими проектами.</p>
         </div>
+        <div className="main__advantages_cards">
+          <div className="main__advantages_card" style={{ background: "#4eb2f7" }}>
+            <i className="fas fa-hourglass-start"></i>
+            <h3>Время</h3>
+            <p style={{ width: "60%" }}>Ваше сэкономленное время и успех проекта.</p>
+          </div>
+          <div className="main__advantages_card" style={{ background: "#c049f8" }}>
+            <i className="fas fa-briefcase"></i>
+            <h3>Начало работы</h3>
+            <p>
+              Не пройдет и 20 минут как я начну работать над вашим проектом, уже буквально через несколько часов после договоренности
+              со мной часть работы будет уже выполнена.
+            </p>
+          </div>
+          <div className="main__advantages_card" style={{ background: "#817eff" }}>
+            <i className="fas fa-business-time"></i>
+            <h3>График работы</h3>
+            <p>
+              Мой график работы с 9 до 9. В связи с таким графиком я выполняю работу в срок,
+              чаще всего даже раньше.
+            </p>
+          </div>
+          <div className="main__advantages_card" style={{ background: "#f74770" }}>
+            
+          </div>
+        </div>
       </div>
     </div>
   );
