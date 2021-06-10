@@ -6,10 +6,15 @@ import "./styles/Works.css";
 export default function Works() {
   const { id } = useParams();
   return (
-    <div className="works">
-      <div className="container">
-        <Footer />
+    <>
+      <div className="works">
+        <div className="container">
+          <div className="works__content">
+            
+          </div>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };

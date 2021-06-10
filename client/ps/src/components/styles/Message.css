@@ -1,4 +1,4 @@
-.message {
+.message_block {
   width: 50%;
   max-width: 300px;
   border-radius: 10px;
@@ -38,4 +38,11 @@
   width: 100%;
   margin-bottom: 30px;
   font-size: .70em;
+}
+
+@media only screen and (max-device-width: 1024px) {
+  .message_block {
+    width: 100%;
+    margin: 0 auto;
+  }
 }

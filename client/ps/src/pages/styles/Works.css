@@ -1,6 +1,11 @@
 .works {
   width: 100%;
-  min-height: 200px;
-  background: #fff;
-  padding-top: 80px;
+  min-height: 1200px;
+  background: #f5f5f5;
+  font-family: "Open Sans", sans-serif;
+  padding-top: 120px;
+}
+
+.works__content {
+  width: 100%;
 }

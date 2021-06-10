@@ -17,3 +17,13 @@
   -moz-box-shadow: 2px 4px 5px -4px rgba(34, 60, 80, 0.2);
   box-shadow: 2px 4px 5px -4px rgba(34, 60, 80, 0.2);
 }
+
+.portfolio__category:nth-child(2) {
+  font-size: .60em;
+}
+
+@media only screen and (max-device-width: 1024px) {
+  .portfolio__category {
+    font-size: .60em;
+  }
+}

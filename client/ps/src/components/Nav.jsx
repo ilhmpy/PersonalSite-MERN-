@@ -14,6 +14,7 @@ export default function Nav() {
           <i class="fas fa-user-cog" onClick={e => window.location.href = "/admin"}></i>
           <i
             className={authorization ? "fas fa-sign-out-alt" : "fas fa-sign-in-alt" }
+            title={authorization ? "Выйти" : "Войти"}
             onClick={e => {
               if (e.target.className == "fas fa-sign-out-alt") {
                 return false;

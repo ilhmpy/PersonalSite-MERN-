@@ -1,14 +1,31 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import "./styles/Admin.css";
+
 import Message from "../components/Message.jsx";
 import Text from "../components/Text.jsx";
 import Button from "../components/Button.jsx";
 import PortfolioWork from "../components/PortfolioWork.jsx";
+import AddWork from "../components/AddWork.jsx";
+import Account from "../components/Account.jsx";
 
 export default function Admin() {
+  const [ openAddWork, setOpenAddWork ] = useState(false);
+
+  window.addEventListener("keydown", e => {
+    if (e.keyCode === 27) {
+      setOpenAddWork(false);
+    };
+  });
+
   return (
     <div className="admin">
-      <div className="admin__modal">
+      <AddWork
+        openStatus={openAddWork}
+        setOpenStatus={setOpenAddWork}
+        onButton={value => {}}
+      />
+      <div className="admin__modal" style={{ display:  openAddWork ? "none" : "block" }}>
         <div className="container">
           <div className="admin__modal_panel" onClick={e => {
             if (e.target.className == "admin__modal_btn") {
@@ -42,7 +59,7 @@ export default function Admin() {
               <div className="portfolio__categories">
                 <div className="portfolio__category">Имя проекта</div>
                 <div className="portfolio__category">Описание</div>
-                <i class="fas fa-plus-circle"></i>
+                <i class="fas fa-plus-circle" onClick={() => setOpenAddWork(true)}></i>
               </div>
               <div className="portfolio__inner">
                 <div className="portfolio__inner_scroll">
@@ -55,7 +72,18 @@ export default function Admin() {
               </div>
             </div>
             <div className="admin__modal_tab" data-tab="users" style={{ display: "none" }}>
-              users
+              <div className="portfolio__categories">
+                <div className="portfolio__category">Имя пользователя</div>
+                <div className="portfolio__category" style={{ width: "70%", maxWidth: "67%" }}>Имейл</div>
+              </div>
+              <div className="portfolio__inner">
+                <div className="portfolio__inner_scroll">
+                  <Account
+                    login="Владислав Зубченко"
+                    email="jsih1236@gmail.com"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

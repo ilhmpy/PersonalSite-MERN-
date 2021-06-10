@@ -13,7 +13,7 @@ export default function App() {
     <>
       <Router>
         <PrivateRouter exact path="/" Component={Main} />
-        <PrivateRouter path="/works" Component={Works} />
+        <PrivateRouter path="/works/:id" Component={Works} />
         <PrivateRouter path="/sign" Component={Sign} />
         <PrivateRouter path="/admin" Component={Admin} />
       </Router>
