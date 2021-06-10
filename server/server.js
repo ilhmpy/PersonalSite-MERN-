@@ -2,9 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const TelegramBot = require("node-telegram-bot-api");
-
-const idChatWithBot = "941765057";
-const botToken = "1817904020:AAGWCegInE0_6Rj1iNPVT_YSWMJYxvfnPPo";
+const { botToken, idChatWithBot } = require("./api/bot/bot.js");
 
 const bot = new TelegramBot(botToken);
 
