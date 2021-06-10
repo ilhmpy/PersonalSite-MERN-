@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles/Main.css";
 
 export default function Main() {
@@ -44,6 +44,29 @@ export default function Main() {
           }}>Отправить сообщение</button>
         </div>
       </div>
+      <div className="main__about_me">
+        <div className="container">
+          <div className="main__advantages__title_box">
+            <h1><span>Обо</span> мне</h1>
+            <p>Здесь вы можете узнать немного информации обо мне</p>
+          </div>
+          <article className="main__about_me__texts">
+            <p>
+              Привет! Меня зовут Влад. Я front-end разработчик с опытом в пол года. В данный момент развиваюсь в основном в стеке MERN.
+              Всегда интересуюсь новыми технологиями и не когда не останавливаю свое обучение. На фрилансе я работаю уже как второй месяц, за это
+              время почерпал не мало опыта в выполнении задач разной сложности. Двигаюсь в направлении full-stack, как выше указано это стек
+              MERN(MongoDB, Express.js, React.js, Node.js).
+              Общий стек состоит из следующих технологий: HTML5, CSS3, SCSS, jQuery, React, Redux, Vue.js, Node.js, Express.js, MongoDB,
+              адаптивная и кроссбраузерная верстка, методологии DRY(Don't Repeat Yourself), BEM(Block Element Modificator).
+            </p>
+            <p>
+              Всегда открыт к сотрудничеству и новым проектам, пишите напрямую в телеграм или
+              через форму. 
+            </p>
+            <button className="main__about_me__btn">Выйти на связь</button>
+          </article>
+        </div>
+      </div>
       <div className="main__advantages">
         <div className="main__advantages__title_box">
           <h1><span>Мои</span> преимущества</h1>
@@ -53,7 +76,7 @@ export default function Main() {
           <div className="main__advantages_card" style={{ background: "#4eb2f7" }}>
             <i className="fas fa-hourglass-start"></i>
             <h3>Время</h3>
-            <p style={{ width: "60%" }}>Ваше сэкономленное время и успех проекта.</p>
+            <p>Ваше сэкономленное время и успех проекта. Я c вероятностью в 99.9% заканчиваю проекты. </p>
           </div>
           <div className="main__advantages_card" style={{ background: "#c049f8" }}>
             <i className="fas fa-briefcase"></i>
@@ -72,7 +95,11 @@ export default function Main() {
             </p>
           </div>
           <div className="main__advantages_card" style={{ background: "#f74770" }}>
-            
+            <i class="fas fa-shield-alt"></i>
+            <h3>Гарантия</h3>
+            <p>
+              Если после выполнения работы и оплаты нужны правки, из-за возможных найденных багов или проблем, я исправлю их за бесплатно.
+            </p>
           </div>
         </div>
       </div>
