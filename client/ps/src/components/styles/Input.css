@@ -1,12 +1,17 @@
 .input {
   width: 100%;
-  height: 60px;
+  height: 30px;
   font-family: "Open Sans", sans-serif;
   border-bottom: 1px solid #9e9e9e;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  padding-left: 5px;
 }
 
 .input::placeholder {
   color: #9e9e9e;
   font-size: .80em;
+}
+
+.input:focus {
+  border-bottom: 1px solid #ff5c36;
 }

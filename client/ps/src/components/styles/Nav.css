@@ -11,12 +11,16 @@
   font-family: 'Open Sans', sans-serif;
 }
 
-.nav i {
+.nav__interface {
   position: absolute;
   right: 0;
   margin-top: -32px;
   cursor: pointer;
   color: #fa9a87;
+}
+
+.nav__interface > i {
+  margin-right: 10px;
 }
 
 .nav__logo {
