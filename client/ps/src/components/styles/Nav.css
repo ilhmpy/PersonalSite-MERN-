@@ -6,9 +6,17 @@
   display: flex;
   align-items: center;
   position: fixed;
-  background: #f5f5f5; 
+  background: #f5f5f5;
   z-index: 999;
   font-family: 'Open Sans', sans-serif;
+}
+
+.nav i {
+  position: absolute;
+  right: 0;
+  margin-top: -32px;
+  cursor: pointer;
+  color: #fa9a87;
 }
 
 .nav__logo {

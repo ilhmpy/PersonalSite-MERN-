@@ -238,6 +238,21 @@
   box-shadow: 3px 12px 26px -1px rgba(34, 60, 80, 0.2);
 }
 
+.main__my_works {
+  width: 100%;
+  background: #fff;
+  padding-top: 50px;
+}
+
+.main__my_works__cards {
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
 @media only screen and (max-device-width: 1024px) {
   .main {
     padding-top: 162px;
@@ -291,6 +306,13 @@
   }
 
   .main__about_me__texts {
+    width: 100%;
+  }
+
+  .main__my_works__cards {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    overflow-x: scroll;
     width: 100%;
   }
 }

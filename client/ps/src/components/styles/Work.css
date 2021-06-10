@@ -1,0 +1,52 @@
+.work {
+  width: 40%;
+  min-width: 370px;
+  max-width: 370px;
+  height: 360px;
+  margin-right: 20px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  display: block;
+  position: relative;
+}
+
+.work__about > *::selection {
+  color: #fff;
+  background: #ff5c36;
+}
+
+.work > img {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.work:hover > .work__about {
+  opacity: 100%;
+}
+
+.work__about {
+  width: 100%;
+  max-width: 370px;
+  background: rgba(0, 0, 0, 60%);
+  position: absolute;
+  opacity: 0%;
+  transition: .5s;
+  height: 354px;
+  text-align: center;
+  color: #fff;
+  padding-top: 80px;
+  margin-top: -360px;
+}
+
+.work__about > p {
+  font-size: .60em;
+}
+
+
+@media only screen and (max-device-width: 1024px) {
+  .work {
+    width: 100%;
+  }
+}

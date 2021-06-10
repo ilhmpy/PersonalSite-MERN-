@@ -2,11 +2,15 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Nav from "./Nav.jsx";
+import Footer from "./Footer.jsx";
 
 export default function PrivateRouter({ path, Component }) {
-  return (
-    <Router>
+  const [ access, setAccess ] = useState(true);
+
+  if (path == "/") {
+    return (
       <Route
+         exact
          path={path}
          render={() => {
            return (
@@ -16,7 +20,21 @@ export default function PrivateRouter({ path, Component }) {
              </React.Fragment>
            );
          }}
-      />
-    </Router>
-  );
+        />
+     )
+   } else {
+     return (
+       <Route
+          path={path}
+          render={() => {
+            return (
+              <React.Fragment>
+                 <Nav />
+                 <Component />
+              </React.Fragment>
+            );
+          }}
+         />
+      );
+   };
 };

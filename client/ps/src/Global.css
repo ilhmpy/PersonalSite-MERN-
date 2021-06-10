@@ -36,6 +36,11 @@ button, textarea, input {
   background: rgba(0, 0, 0, 60%);
 }
 
+.wrap {
+  width: 100%;
+  min-height: 200px;
+}
+
 @media only screen and (min-device-width: 2300px) {
   .black_bg {
     height: 1800px;
