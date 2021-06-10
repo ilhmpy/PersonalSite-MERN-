@@ -17,6 +17,7 @@ a {
 button, textarea, input {
   outline: none;
   border: 0;
+  resize: none;
   background: 0;
 }
 
