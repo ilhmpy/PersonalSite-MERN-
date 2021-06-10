@@ -1,0 +1,19 @@
+.button {
+  width: 60%;
+  max-width: 247px;
+  height: 40px;
+  cursor: pointer;
+  display: block;
+  color: #fff;
+  font-family: "Open Sans", sans-serif;
+  border-radius: 50px;
+  margin: 0 auto;
+  background: #fa8063;
+  transition: .5s;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.button:hover {
+  background: #ff5c36;
+}

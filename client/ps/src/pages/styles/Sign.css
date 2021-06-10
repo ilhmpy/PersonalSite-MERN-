@@ -1,0 +1,70 @@
+.sign {
+  width: 100%;
+  height: 650px;
+  background: #f5f5f5;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign__modal {
+  width: 40%;
+  padding-right: 20px;
+  font-family: "Open Sans", sans-serif;
+  padding-left: 20px;
+  background: #fff;
+  border-radius: 10px;
+  max-width: 380px;
+  -webkit-box-shadow: 0px 4px 19px 8px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 4px 19px 8px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 4px 19px 8px rgba(34, 60, 80, 0.2);
+  padding-top: 13px;
+}
+
+.sign__modal_btns {
+  width: 100%;
+  height: 40px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  padding-top: 10px;
+}
+
+.sign__modal_btn {
+  width: 50%;
+  margin-right: 10px;
+  height: inherit;
+  font-family: "Open Sans", sans-serif;
+  background: #ff5c36;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.sign__modal_btn:nth-child(1) {
+  border-right: 1px solid #ff7c5e;
+}
+
+.valid {
+
+}
+
+.notValid {
+
+}
+
+.sign__modal_tabs {
+  width: 100%;
+  padding-top: 30px;
+}
+
+.sign__modal_tab {
+  width: 100%;
+}

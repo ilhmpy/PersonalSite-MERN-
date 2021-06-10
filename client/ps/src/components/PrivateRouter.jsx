@@ -13,12 +13,12 @@ export default function PrivateRouter({ path, Component }) {
          exact
          path={path}
          render={() => {
-           return (
-             <React.Fragment>
-                <Nav />
-                <Component />
-             </React.Fragment>
-           );
+             return (
+               <React.Fragment>
+                  <Nav />
+                  <Component />
+               </React.Fragment>
+            );  
          }}
         />
      )
