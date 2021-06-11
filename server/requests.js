@@ -6,7 +6,7 @@ const hashPassword = (password, salt) => crypt.hashSync(password, salt);
 const createToken = item => jwt.sign({ item }, "MySuP3R_z3kr3t", { expiresIn: "6h" });
 
 function createAccount(login, password, email, token, salt) {
-  return { login, password, email, token, salt, superUser: false };
+  return { login, password, email, token, salt, superUser: false, confirm: false };
 };
 
 function requests(app, parser, collections) {
@@ -22,6 +22,7 @@ function requests(app, parser, collections) {
 
     users.find({ login, email }).toArray((error, docs) => {
       if (!docs.length > 0) {
+        users.insertOne(account);
         res.status(200).send({ ok: true, status: 200, detail: "Accepted code send on email" });
       } else res.status(400).send({ ok: false, status: 400, detail: "Account is already registered" });
     });
