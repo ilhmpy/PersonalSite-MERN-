@@ -7,11 +7,13 @@ export default class Query {
   };
 
   addClass(items, className) {
-    document.querySelectorAll(items).forEach(item => item.classList.add(className));
+    if (typeof items == "string") document.querySelectorAll(items).forEach(item => item.classList.add(className));
+    else items.classList.add(className);
   };
 
   removeClass(items, className) {
-    document.querySelectorAll(items).forEach(item => item.classList.remove(className));
+    if (typeof items == "string") document.querySelectorAll(items).forEach(item => item.classList.remove(className));
+    else items.classList.remove(className);
   };
 
   hide(items) {

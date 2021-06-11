@@ -3,6 +3,6 @@ import "./styles/Button.css";
 
 export default function Button({ onButton, text }) {
   return (
-    <button className="button" onClick={onButton()}>{text}</button>
+    <button className="button" onClick={e => onButton(e)}>{text}</button>
   );
 };

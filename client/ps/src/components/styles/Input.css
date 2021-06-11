@@ -15,3 +15,11 @@
 .input:focus {
   border-bottom: 1px solid #ff5c36;
 }
+
+.valid {
+  border-bottom: 1px solid #00ff7e;
+}
+
+.notValid {
+  border-bottom: 1px solid #ff5c36;
+}
