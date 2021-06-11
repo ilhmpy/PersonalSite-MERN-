@@ -38,5 +38,4 @@ app.post("/api/bot/send-message", parser, (req, res) => {
   );
 });
 
-start();
-requests(app, parser);
+start(app, parser);

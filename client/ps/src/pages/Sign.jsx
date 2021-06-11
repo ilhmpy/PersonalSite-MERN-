@@ -9,19 +9,48 @@ import Query from "../Query.js";
 const $ = new Query();
 
 export default function Sign() {
-  const [ email, setEmail ] = useState("jsih1236@gmail.com");
+  const [ email, setEmail ] = useState("");
   const [ openEmailAccepted, setOpenEmailAccepted ] = useState(false);
+  const [ already, setAlready ] = useState(false);
 
   function postRegisterData(object) {
     async function inner() {
-      let req = await fetch("http://localhost:8000/api/users/", {
+      let req = await fetch("http://localhost:8000/api/users/add", {
         method: "POST",
         body: JSON.stringify(object),
         headers: { "content-type": "application/json" }
       });
+      let res = await req.json();
+      let login = document.querySelector(".up-login");
+      let email = document.querySelector(".up-email");
+      let password = document.querySelector(".up-password");
+      console.log(res);
+      if (req.status == 200) {
+        $.removeClass(login, "notValid");
+        $.removeClass(email, "notValid");
+        $.removeClass(password, "notValid");
+        $.addClass(login, "valid");
+        $.addClass(email, "valid");
+        $.addClass(password, "valid");
+        setOpenEmailAccepted(true);
+      } else {
+        $.removeClass(login, "valid");
+        $.removeClass(email, "valid");
+        $.removeClass(password, "valid");
+        $.addClass(login, "notValid");
+        $.addClass(email, "notValid");
+        $.addClass(password, "notValid");
+        setAlready(true);
+      };
     };
     inner();
   };
+
+  window.addEventListener("keydown", e => {
+    if (e.keyCode == 27) {
+      setOpenEmailAccepted(false);
+    };
+  });
 
   return (
     <div className="sign">
@@ -75,7 +104,8 @@ export default function Sign() {
                       $.addClass(login, "valid");
                       $.addClass(email, "valid");
                       $.addClass(password, "valid");
-                      console.log({ login: login.value, email: email.value, password: password.value });
+                      postRegisterData({ login: login.value, email: email.value, password: password.value });
+                      setEmail(email.value);
                   } else {
                        $.removeClass(login, "valid");
                        $.removeClass(email, "valid");
@@ -87,6 +117,7 @@ export default function Sign() {
                }}
                text="Зарегистрироваться"
             />
+            <h3 className="already" style={{ display: already ? "block" : "none" }}>Аккаунт с таким именем или имейлом уже имеется.</h3>
           </div>
         </div>
       </div>

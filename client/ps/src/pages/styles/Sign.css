@@ -61,6 +61,16 @@
   width: 100%;
 }
 
+.already {
+  color: #ff7c5e;
+  font-size: .50em;
+  cursor: pointer;
+}
+
+.already:hover {
+  text-decoration: underline;
+}
+
 @media only screen and (max-device-width: 1024px) {
   .sign__modal {
     width: 90%;
