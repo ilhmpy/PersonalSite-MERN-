@@ -31,7 +31,7 @@ async function requests(app, parser, collections) {
     auth: { user, pass }
   });
 
-  // регистрация аккаунта
+  // register account
   app.post("/api/users/add", parser, (req, res) => {
     const { login, password, email } = req.body;
     const salt = generateSalt();
@@ -57,23 +57,52 @@ async function requests(app, parser, collections) {
         send(res, { code, token }, 201);
       } else send(res, "Account is already registered", 409);
     });
+  });
 
-    app.post("/api/users/confirm-email", parser, (req, res) => {
-      const { token } = req.body;
-      users.find({ token }).toArray((error, result) => {
-        if (result.length > 0) {
-          const { login, email, password, superUser, authorization, salt, token } = result[0];
-          users.update({ token }, { login, email, password, superUser, authorization, salt, token, confirm: true }, { upsert: false });
-          send(res, "Email is confirmed");
-          sendEmail(emailer, {
-            from: user,
-            to: `${email}`,
-            subject: "Поздравляем! Регистрация подтверждена!",
-            text: "Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте",
-            html: "<p>Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте</p>"
-          });
-        } else send(res, "Email is not confirmed", 400);
-      });
+  // confirm email account
+  app.post("/api/users/confirm-email", parser, (req, res) => {
+    const { token } = req.body;
+    users.find({ token }).toArray((error, result) => {
+      if (result.length > 0) {
+        const { login, email, password, superUser, authorization, salt, token } = result[0];
+        users.update({ token }, { login, email, password, superUser, authorization, salt, token, confirm: true }, { upsert: false });
+        send(res, "Email is confirmed");
+        sendEmail(emailer, {
+          from: user,
+          to: `${email}`,
+          subject: "Поздравляем! Регистрация подтверждена!",
+          text: "Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте",
+          html: "<p>Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте</p>"
+        });
+      } else send(res, "Email is not confirmed", 400);
+    });
+  });
+
+  // sign in
+  app.post("/api/users/sign-in", parser, (req, res) => {
+    // поиск аккаунта с таким именем
+    users.find({ login: req.body.login }).toArray((error, result) => {
+      if (result.length > 0) {
+
+        // деструктуризация всех данных
+        const { login, email, password, superUser, authorization, salt, token, confirm } = result[0];
+
+        // хеширование полученного пароля
+        const candidatePassword = hashPassword(req.body.password, salt);
+
+        // если пароль совпадает полученному паролю а так же аккаунта подтвержден
+        if (password == candidatePassword & confirm) {
+
+          // сгенерировать новый токен для аккаунта и сохранить его а так же вернуть ответ клиенту о успешной авторизации в виде токена
+          const newToken = createToken({ login, email, password });
+          users.update({ login }, { login, email, password, superUser, authorization, salt, confirm, token: newToken, authorization: true }, { upsert: false });
+          send(res, { token: newToken }, 200);
+
+          // если данные оказались не корректны
+        } else send(res, "Data is not correct", 400);
+
+        // если такого аккаунта и во все не существует
+      } else send(res, "Account is not register", 400);
     });
   });
 };

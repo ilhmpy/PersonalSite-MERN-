@@ -14,6 +14,7 @@ export default function Sign() {
   const [ already, setAlready ] = useState(false);
   const [ code, setCode ] = useState(0);
   const [ token, setToken ] = useState("");
+  const [ correct, setCorrect ] = useState(null);
 
   function postRegisterData(object) {
     async function inner() {
@@ -26,26 +27,32 @@ export default function Sign() {
       let login = document.querySelector(".up-login");
       let email = document.querySelector(".up-email");
       let password = document.querySelector(".up-password");
-      console.log(res);
       if (req.status >= 200 & req.status < 300) {
-        $.removeClass(login, "notValid");
-        $.removeClass(email, "notValid");
-        $.removeClass(password, "notValid");
-        $.addClass(login, "valid");
-        $.addClass(email, "valid");
-        $.addClass(password, "valid");
+        setCorrect(true);
         setOpenEmailAccepted(true);
         setCode(res.detail.code);
-        setToken(res.detail.token)
+        setToken(res.detail.token);
       } else {
-        $.removeClass(login, "valid");
-        $.removeClass(email, "valid");
-        $.removeClass(password, "valid");
-        $.addClass(login, "notValid");
-        $.addClass(email, "notValid");
-        $.addClass(password, "notValid");
+        setCorrect(false);
         setAlready(true);
       };
+    };
+    inner();
+  };
+
+  function postSignIn(object) {
+    async function inner() {
+      let req = await fetch("http://localhost:8000/api/users/sign-in", {
+        method: "POST",
+        body: JSON.stringify(object),
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
+      if (req.status == 200) {
+        setCorrect(true);
+        $.redirect("/");
+        localStorage.setItem("token", res.token);
+      } else setCorrect(false);
     };
     inner();
   };
@@ -62,8 +69,10 @@ export default function Sign() {
         email={email}
         code={code}
         token={token}
+        correct={correct}
         openStatus={openEmailAccepted}
         setOpenStatus={setOpenEmailAccepted}
+        setCorrect={setCorrect}
       />
       <div className="sign__modal" style={{ display: openEmailAccepted ? "none" : "block" }}>
         <div className="sign__modal_btns" onClick={e => {
@@ -72,6 +81,7 @@ export default function Sign() {
               if (tab.dataset.tab == e.target.dataset.tab) {
                 document.querySelectorAll(".sign__modal_tab").forEach(tab => tab.style.display = "none");
                 tab.style.display = "block";
+                setCorrect(null);
               };
             });
           };
@@ -81,19 +91,27 @@ export default function Sign() {
         </div>
         <div className="sign__modal_tabs">
           <div className="sign__modal_tab" data-tab="in">
-            <Input placeholder="Ваш логин" className="in-login" />
-            <Input placeholder="Ваш пароль" type="password" className="in-password" />
+            <Input correct={correct} placeholder="Ваш логин" className="in-login" />
+            <Input correct={correct} placeholder="Ваш пароль" type="password" className="in-password" />
             <Button
               onButton={e => {
-
+                let login = document.querySelector(".in-login").value;
+                let password = document.querySelector(".in-password").value;
+                if (
+                  login.length > 0 &
+                  password.length > 0
+                ) {
+                  postSignIn({ login, password });
+                  setCorrect(true);
+                } else setCorrect(false);
               }}
               text="Войти"
             />
           </div>
           <div className="sign__modal_tab" data-tab="up" style={{ display: "none" }}>
-            <Input placeholder="Логин" className="up-login" />
-            <Input placeholder="Эмейл" type="email" className="up-email" />
-            <Input placeholder="Пароль" type="password" className="up-password" />
+            <Input correct={correct} placeholder="Логин" className="up-login" />
+            <Input correct={correct} placeholder="Эмейл" type="email" className="up-email" />
+            <Input correct={correct} placeholder="Пароль" type="password" className="up-password" />
             <Button
                onButton={e => {
                  let login = document.querySelector(".up-login");
@@ -104,22 +122,10 @@ export default function Sign() {
                       email.value.length > 0 &
                       password.value.length > 0
                   ) {
-                      $.removeClass(login, "notValid");
-                      $.removeClass(email, "notValid");
-                      $.removeClass(password, "notValid");
-                      $.addClass(login, "valid");
-                      $.addClass(email, "valid");
-                      $.addClass(password, "valid");
+                      setCorrect(true);
                       postRegisterData({ login: login.value, email: email.value, password: password.value });
                       setEmail(email.value);
-                  } else {
-                       $.removeClass(login, "valid");
-                       $.removeClass(email, "valid");
-                       $.removeClass(password, "valid");
-                       $.addClass(login, "notValid");
-                       $.addClass(email, "notValid");
-                       $.addClass(password, "notValid");
-                  };
+                  } else setCorrect(false);
                }}
                text="Зарегистрироваться"
             />
