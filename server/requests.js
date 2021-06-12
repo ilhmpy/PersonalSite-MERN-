@@ -40,8 +40,8 @@ async function requests(app, parser, collections) {
     const account = createAccount(login, hashingPassword, email, token, salt);
     const code = createCode();
 
-    users.find({ login, email }).toArray((error, result) => {
-      if (!result.length > 0) {
+    users.findOne({ login, email }, (error, result) => {
+      if (!result) {
         let text = `Для подтверждения вам осталось лишь ввести данный код в поле на сайте: ${code}. Не в коем случае не выходите из окна ввода.`;
         sendEmail(emailer, {
           from: user,
@@ -55,37 +55,35 @@ async function requests(app, parser, collections) {
         });
         users.insertOne(account);
         send(res, { code, token }, 201);
-      } else send(res, "Account is already registered", 409);
+      } else send(res, "User already register", 409);
     });
   });
 
-  // confirm email account
   app.post("/api/users/confirm-email", parser, (req, res) => {
     const { token } = req.body;
-    users.find({ token }).toArray((error, result) => {
-      if (result.length > 0) {
-        const { login, email, password, superUser, authorization, salt, token } = result[0];
-        users.update({ token }, { login, email, password, superUser, authorization, salt, token, confirm: true }, { upsert: false });
-        send(res, "Email is confirmed");
-        sendEmail(emailer, {
-          from: user,
-          to: `${email}`,
-          subject: "Поздравляем! Регистрация подтверждена!",
-          text: "Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте",
-          html: "<p>Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте</p>"
+    users.findOne({ token }, (err, result) => {
+      if (result != null) {
+        const { login, email, password, superUser, authorization, salt, token } = result;
+        users.findOneAndUpdate({ token }, { $set: { login, email, password, superUser, authorization, salt, token, confirm: true }}, (err, result) => {
+          send(res, "Email is confirmed");
+          sendEmail(emailer, {
+            from: user,
+            to: `${email}`,
+            subject: "Поздравляем! Регистрация подтверждена!",
+            text: "Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте",
+            html: "<p>Мы поздравляем вас с регистрацией, в данный момент вы уже можете авторизоваться в своём аккаунте</p>"
+          });
         });
       } else send(res, "Email is not confirmed", 400);
     });
   });
 
-  // sign in
+  // sign
   app.post("/api/users/sign-in", parser, (req, res) => {
-    // поиск аккаунта с таким именем
-    users.find({ login: req.body.login }).toArray((error, result) => {
-      if (result.length > 0) {
-
+    users.findOne({ login: req.body.login }, (err, result) => {
+      if (result != null) {
         // деструктуризация всех данных
-        const { login, email, password, superUser, authorization, salt, token, confirm } = result[0];
+        const { login, email, password, superUser, authorization, salt, token, confirm } = result;
 
         // хеширование полученного пароля
         const candidatePassword = hashPassword(req.body.password, salt);
@@ -95,16 +93,47 @@ async function requests(app, parser, collections) {
 
           // сгенерировать новый токен для аккаунта и сохранить его а так же вернуть ответ клиенту о успешной авторизации в виде токена
           const newToken = createToken({ login, email, password });
-          users.update({ login }, { login, email, password, superUser, authorization, salt, confirm, token: newToken, authorization: true }, { upsert: false });
-          send(res, { token: newToken }, 200);
+          users.findOneAndUpdate({ login }, { $set: { login, email, password, superUser, authorization, salt, confirm, token: newToken, authorization: true }}, (error, result) => {
+            send(res, { token: newToken }, 200);
+          });
 
           // если данные оказались не корректны
         } else send(res, "Data is not correct", 400);
-
         // если такого аккаунта и во все не существует
-      } else send(res, "Account is not register", 400);
+      } else send(res, "Account is not register", 400)
     });
   });
+
+  app.get("/api/users/get-level-access", parser, (req, res) => {
+    const { token } = req.query;
+    users.findOne({ token }, (err, result) => {
+      if (result != null) {
+        if (result.superUser) send(res, "User is super user");
+        else send(res, "User is not super user", 400);
+      };
+    });
+  });
+
+  app.get("/api/users/get-authorization", parser, (req, res) => {
+    const { token } = req.query;
+    users.findOne({ token }, (error, result) => {
+      if (result != null) {
+        send(res, { authorization: result.authorization }, 200);
+      } else send(res, "Data is null", 400);
+    });
+  });
+
+  app.get("/api/users/un-auth", parser, (req, res) => {
+    const { token } = req.query;
+    users.findOne({ token }, (err, result) => {
+      const { login, email, password, superUser, authorization, salt, token, confirm } = result;
+      if (result != null) {
+        users.updateOne({ token }, { $set: { authorization: false }}, (error, result) => {});
+        send(res, "User is un-auth");
+      } else send(res, "User is not un-auth", 400);
+    });
+  });
+
 };
 
 module.exports = requests;

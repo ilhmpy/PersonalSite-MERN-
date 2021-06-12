@@ -48,10 +48,11 @@ export default function Sign() {
         headers: { "content-type": "application/json" }
       });
       let res = await req.json();
+      console.log(res);
       if (req.status == 200) {
         setCorrect(true);
         $.redirect("/");
-        localStorage.setItem("token", res.token);
+        localStorage.setItem("token", res.detail.token);
       } else setCorrect(false);
     };
     inner();
