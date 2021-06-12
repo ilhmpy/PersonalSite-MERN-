@@ -216,6 +216,7 @@
 .main__about_me__texts > p {
   font-size: .80em;
   font-weight: 300;
+  margin-bottom: 51px;
 }
 
 .main__about_me__btn {
@@ -294,7 +295,13 @@
   .main__advantages_cards {
     overflow: hidden;
     overflow-x: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
     max-width: 265px;
+  }
+
+  .main__advantages_cards::-webkit-scrollbar {
+    width: 0;
   }
 
   .main__advantages__title_box {
@@ -313,6 +320,12 @@
     flex-wrap: nowrap;
     overflow: hidden;
     overflow-x: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
     width: 100%;
+  }
+
+  .main__my_works__cards::-webkit-scrollbar {
+    width: 0;
   }
 }

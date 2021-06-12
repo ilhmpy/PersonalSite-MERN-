@@ -47,5 +47,11 @@
   .works__content_imgs {
     overflow: hidden;
     overflow-x: auto;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+  }
+
+  .works__content_imgs::-webkit-scrollbar {
+    width: 0;
   }
 }

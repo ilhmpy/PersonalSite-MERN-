@@ -124,4 +124,22 @@
     min-width: 74px;
     font-size: .40em;
   }
+
+  .messages__inner {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+  }
+
+  .messages__inner::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .portfolio__inner {
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+  }
+
+  .portfolio__inner::-webkit-scrollbar {
+    width: 0;
+  }
 }

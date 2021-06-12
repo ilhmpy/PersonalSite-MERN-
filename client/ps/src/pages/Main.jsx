@@ -6,9 +6,35 @@ import yoof from "../images/yoof.png";
 import Footer from "../components/Footer.jsx";
 
 export default function Main() {
+  const [ aboutText, setAboutText ] = useState("");
+
+  useEffect(() => {
+    async function getAboutText() {
+      let req = await fetch("http://localhost:8000/api/about/get-text", {
+        method: "GET",
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
+      if (req.status == 200) setAboutText(res.detail.text);
+    };
+    getAboutText();
+  }, []);
+
   function postMessage(value) {
     async function inner() {
       let req = await fetch("http://localhost:8000/api/bot/send-message", {
+        method: "POST",
+        body: JSON.stringify(value),
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
+    };
+    inner();
+  };
+
+  function postMessageToDB(value) {
+    async function inner() {
+      let req = await fetch("http://localhost:8000/api/messages/send-message", {
         method: "POST",
         body: JSON.stringify(value),
         headers: { "content-type": "application/json" }
@@ -24,7 +50,7 @@ export default function Main() {
 
         <div className="wrap">
           <div className="main__about">
-            <h1><span>Front-end</span> разработка сайтов</h1>
+            <h1><span>Full-stack</span> разработка сайтов</h1>
             <p>
               Качественная и быстрая работа. Постоянная связь и заинтересованность в прекрасном результате.
             </p>
@@ -39,13 +65,15 @@ export default function Main() {
                 document.querySelector(".name").value.length > 0 &
                 document.querySelector(".connect").value.length > 0 &
                 document.querySelector(".message").value.length > 0
-              ) postMessage(
-                {
+              ) {
+                let newMessage = {
                   name: document.querySelector(".name").value,
                   connect: document.querySelector(".connect").value,
                   message: document.querySelector(".message").value
-                }
-             );
+                };
+                postMessage(newMessage);
+                postMessageToDB(newMessage);
+              }
             }}>Отправить сообщение</button>
           </div>
         </div>
@@ -60,12 +88,7 @@ export default function Main() {
             </div>
             <article className="main__about_me__texts">
               <p>
-                Привет! Меня зовут Влад. Я front-end разработчик с опытом в пол года. В данный момент развиваюсь в основном в стеке MERN.
-                Всегда интересуюсь новыми технологиями и не когда не останавливаю свое обучение. На фрилансе я работаю уже как второй месяц, за это
-                время почерпал не мало опыта в выполнении задач разной сложности. Двигаюсь в направлении full-stack, как выше указано это стек
-                MERN(MongoDB, Express.js, React.js, Node.js).
-                Общий стек состоит из следующих технологий: HTML5, CSS3, SCSS, jQuery, React, Redux, Vue.js, Node.js, Express.js, MongoDB,
-                адаптивная и кроссбраузерная верстка, методологии DRY(Don't Repeat Yourself), BEM(Block Element Modificator).
+                {aboutText}
               </p>
               <p>
                 Всегда открыт к сотрудничеству и новым проектам, пишите напрямую в телеграм или

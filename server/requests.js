@@ -23,7 +23,11 @@ async function sendEmail(transporter, object) {
 };
 
 async function requests(app, parser, collections) {
-  const { users, messages, works } = collections;
+  const { users, messages, works, about } = collections;
+
+  /*////
+    AUTH API
+  */
 
   // smtp транспортер
   const emailer = nodemailer.createTransport({
@@ -134,6 +138,33 @@ async function requests(app, parser, collections) {
     });
   });
 
+  /*////////
+    MESSAGES API
+  */
+
+  app.post("/api/messages/send-message", parser, (req, res) => messages.insertOne(req.body));
+  app.get("/api/messages/get-messages", parser, (req, res) => messages.find().toArray((err, result) => send(res, result)));
+  app.delete("/api/messages/delete-message", parser, (req, res) => {
+    const { message } = req.query;
+    messages.remove({ message });
+    send(res, "Message is delete");
+  });
+
+  /*/////
+    ABOUT API
+  */
+  app.get("/api/about/get-text", parser, (req, res) => about.find().toArray((err, result) => send(res, result[0])));
+  app.put("/api/about/put-text", parser, (req, res) => {
+    const { text } = req.body;
+    about.find().toArray((err, result) => {
+      about.updateOne({ text: result[0].text }, { $set: { text }}, (err, result) => {});
+    });
+  });
+
+  /*///
+    USERS API
+  */
+  app.get("/api/users/get-all-users", parser, (req, res) => users.find().toArray((err, result) => send(res, result)));
 };
 
 module.exports = requests;

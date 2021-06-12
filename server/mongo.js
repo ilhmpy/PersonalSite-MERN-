@@ -16,8 +16,9 @@ async function start(app, parser) {
     const users = client.db().collection("users");
     const messages = client.db().collection("messages");
     const works = client.db().collection("works");
-
-    requests(app, parser, { users, messages, works });
+    const about = client.db().collection("about");
+    
+    requests(app, parser, { users, messages, works, about });
 
   } catch(error) {
     console.log(error)
