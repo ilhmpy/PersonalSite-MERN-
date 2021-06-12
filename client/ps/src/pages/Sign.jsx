@@ -12,6 +12,8 @@ export default function Sign() {
   const [ email, setEmail ] = useState("");
   const [ openEmailAccepted, setOpenEmailAccepted ] = useState(false);
   const [ already, setAlready ] = useState(false);
+  const [ code, setCode ] = useState(0);
+  const [ token, setToken ] = useState("");
 
   function postRegisterData(object) {
     async function inner() {
@@ -25,7 +27,7 @@ export default function Sign() {
       let email = document.querySelector(".up-email");
       let password = document.querySelector(".up-password");
       console.log(res);
-      if (req.status == 200) {
+      if (req.status >= 200 & req.status < 300) {
         $.removeClass(login, "notValid");
         $.removeClass(email, "notValid");
         $.removeClass(password, "notValid");
@@ -33,6 +35,8 @@ export default function Sign() {
         $.addClass(email, "valid");
         $.addClass(password, "valid");
         setOpenEmailAccepted(true);
+        setCode(res.detail.code);
+        setToken(res.detail.token)
       } else {
         $.removeClass(login, "valid");
         $.removeClass(email, "valid");
@@ -56,6 +60,8 @@ export default function Sign() {
     <div className="sign">
       <EmailAccepted
         email={email}
+        code={code}
+        token={token}
         openStatus={openEmailAccepted}
         setOpenStatus={setOpenEmailAccepted}
       />
