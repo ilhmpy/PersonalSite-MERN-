@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const crypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const { user, pass } = require("./mailerConfig.js");
+const MongoId = require("mongodb").ObjectId;
 
 const generateSalt = (gen = 10) => crypt.genSaltSync(gen);
 const hashPassword = (password, salt) => crypt.hashSync(password, salt);
@@ -175,7 +176,7 @@ async function requests(app, parser, collections) {
 
   app.get("/api/works/get-works-by-id", parser, (req, res) => {
     const { id } = req.query;
-    works.findOne({ _id: id }, (err, result) => {
+    works.findOne({ _id: new MongoId(id) }, (err, result) => {
       if (!err) send(res, result);
     });
   });
@@ -183,18 +184,23 @@ async function requests(app, parser, collections) {
   app.post("/api/works/post-works", parser, (req, res) => {
     const { titlePhoto, photos, name, about, gitHubLink, hostingLink } = req.body;
     works.insertOne({
-      titlePhoto, photos, name, about, gitHubLink, hostingLink, likes: 0
+      titlePhoto, photos, name, about, gitHubLink, hostingLink
     });
     send(res, "Work is added", 209);
   });
 
   app.put("/api/works/put-works", parser, (req, res) => {
     const { id } = req.query;
+    const { name, about, gitHubLink, hostingLink } = req.body;
+    works.updateOne({ _id: new MongoId(id) }, { $set: { name, about, gitHubLink, hostingLink }}, (err, result) => {
+      if (!err) send(res, "Work is eddit");
+      else send(res, "Work is not eddit", 400);
+    });
   });
 
   app.delete("/api/works/delete-works", parser, (req, res) => {
     const { id } = req.query;
-    works.remove({ _id: id });
+    works.remove({ _id: new MongoId(id) });
     send(res, "Work is delete");
   });
 };

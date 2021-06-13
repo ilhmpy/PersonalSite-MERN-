@@ -36,14 +36,23 @@
   height: 365px;
   text-align: center;
   color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-top: 80px;
   margin-top: -370px;
 }
 
 .work__about > p {
   font-size: .60em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+.work__about > h3 {
+  font-size: .80em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 @media only screen and (max-device-width: 1024px) {
   .work {

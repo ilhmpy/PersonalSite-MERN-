@@ -33,6 +33,7 @@
   display: -ms-flex;
   display: flex;
   grid-gap: 10px;
+  height: 52px;
 }
 
 .works__content_links > a {
@@ -53,5 +54,11 @@
 
   .works__content_imgs::-webkit-scrollbar {
     width: 0;
+  }
+}
+
+@media only screen and (min-device-width: 2000px) {
+  .works {
+    min-height: 100vh;
   }
 }

@@ -10,6 +10,7 @@
   border-radius: 10px;
   border: 1px solid #c7c7c7;
   margin-bottom: 10px;
+  position: relative;
 }
 
 .portfolio_work:hover {
@@ -27,6 +28,49 @@
 
 .category:nth-child(2) {
   font-size: .80em;
+}
+
+.portfolio_work__context {
+  display: none;
+  position: absolute;
+  width: 130px;
+  height: 60px;
+  background: #fff;
+  z-index: 99;
+  margin-top: 92px;
+  border-radius: 10px;
+  right: 0;
+  margin-right: 0px;
+  -webkit-box-shadow: 4px 4px 31px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 31px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 31px 0px rgba(34, 60, 80, 0.2);
+}
+
+.portfolio_work__context_item {
+  width: 100%;
+  height: 30px;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  font-size: .70em;
+  padding-right: 5px;
+}
+
+.portfolio_work__context_item:nth-child(1) {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.portfolio_work__context_item:nth-child(2) {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.portfolio_work__context_item:hover {
+  background: #ff5c36;
+  color: #fff;
 }
 
 @media only screen and (max-device-width: 1024px) {
