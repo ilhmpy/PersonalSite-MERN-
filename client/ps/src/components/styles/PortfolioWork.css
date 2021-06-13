@@ -20,6 +20,13 @@
 
 .portfolio__category:nth-child(2) {
   font-size: .60em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category:nth-child(2) {
+  font-size: .80em;
 }
 
 @media only screen and (max-device-width: 1024px) {

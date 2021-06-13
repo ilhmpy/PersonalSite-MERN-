@@ -4,6 +4,7 @@ export default class Query {
     this.addElement = this.addElement.bind(this);
     this.removeElement = this.removeElement.bind(this);
     this.edditElement = this.edditElement.bind(this);
+    this.convertPhotoToBase64 = this.convertPhotoToBase64.bind(this);
   };
 
   addClass(items, className) {
@@ -84,6 +85,14 @@ export default class Query {
         src.setAttribute("src", e.target.result);
       };
     } else return photo;
+  };
+
+  convertPhotoToBase64(photo, set) {
+    const reader = new FileReader();
+    reader.readAsDataURL(photo);
+    reader.onload = e => {
+      this.addElement(e.target.result, set);
+    };
   };
 
   getCurrentDate() {

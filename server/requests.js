@@ -153,7 +153,9 @@ async function requests(app, parser, collections) {
   /*/////
     ABOUT API
   */
-  app.get("/api/about/get-text", parser, (req, res) => about.find().toArray((err, result) => send(res, result[0])));
+  app.get("/api/about/get-text", parser, (req, res) => about.find().toArray((err, result) => {
+    if (result[0] != undefined)  send(res, result[0])
+  }));
   app.put("/api/about/put-text", parser, (req, res) => {
     const { text } = req.body;
     about.find().toArray((err, result) => {
@@ -165,6 +167,36 @@ async function requests(app, parser, collections) {
     USERS API
   */
   app.get("/api/users/get-all-users", parser, (req, res) => users.find().toArray((err, result) => send(res, result)));
+
+  /*///
+    WORKS API
+  */
+  app.get("/api/works/get-works", parser, (req, res) => works.find().toArray((err, result) => send(res, result)));
+
+  app.get("/api/works/get-works-by-id", parser, (req, res) => {
+    const { id } = req.query;
+    works.findOne({ _id: id }, (err, result) => {
+      if (!err) send(res, result);
+    });
+  });
+
+  app.post("/api/works/post-works", parser, (req, res) => {
+    const { titlePhoto, photos, name, about, gitHubLink, hostingLink } = req.body;
+    works.insertOne({
+      titlePhoto, photos, name, about, gitHubLink, hostingLink, likes: 0
+    });
+    send(res, "Work is added", 209);
+  });
+
+  app.put("/api/works/put-works", parser, (req, res) => {
+    const { id } = req.query;
+  });
+
+  app.delete("/api/works/delete-works", parser, (req, res) => {
+    const { id } = req.query;
+    works.remove({ _id: id });
+    send(res, "Work is delete");
+  });
 };
 
 module.exports = requests;

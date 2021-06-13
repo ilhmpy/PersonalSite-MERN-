@@ -31,7 +31,6 @@ export default function Nav({ access, auth }) {
         headers: { "content-type": "application/json" }
       });
       let res = await req.json();
-      console.log(res);
       if (req.status == 200) $.redirect("/");
     };
     inner();

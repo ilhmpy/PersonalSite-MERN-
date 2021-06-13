@@ -7,6 +7,7 @@ import Footer from "../components/Footer.jsx";
 
 export default function Main() {
   const [ aboutText, setAboutText ] = useState("");
+  const [ works, setWorks ] = useState([]);
 
   useEffect(() => {
     async function getAboutText() {
@@ -17,6 +18,18 @@ export default function Main() {
       let res = await req.json();
       if (req.status == 200) setAboutText(res.detail.text);
     };
+
+    async function getWorks() {
+      let req = await fetch("http://localhost:8000/api/works/get-works", {
+        method: "GET",
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
+      console.log(res);
+      if (req.status == 200) setWorks(res.detail);
+    };
+
+    getWorks();
     getAboutText();
   }, []);
 
@@ -145,13 +158,19 @@ export default function Main() {
                 <p>Здесь вы можете увидеть мои проекты.</p>
               </div>
               <div className="main__my_works__cards">
-                <Work
-                  id="0"
-                  likes="0"
-                  photo={yoof}
-                  title="YOOF"
-                  text="Ресурс помогающий покупателям найти выгодное предложение"
-                />
+                {
+                  works.map(work => {
+                    return (
+                      <Work
+                        id={work._id}
+                        likes={work.likes}
+                        photo={work.titlePhoto}
+                        title={work.name}
+                        text={work.about}
+                      />
+                    );
+                  })
+                }
               </div>
             </div>
           </div>

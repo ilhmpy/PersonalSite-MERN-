@@ -45,8 +45,21 @@ export default function Admin() {
         method: "GET",
         headers: { "content-type": "application/json" }
       });
+      let res = await req.json();
+      if (req.status == 200) setUsers(res.detail);
     };
 
+    async function getWorks() {
+      let req = await fetch("http://localhost:8000/api/works/get-works", {
+        method: "GET",
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
+      console.log(res);
+      if (req.status == 200) setWorks(res.detail);
+    };
+
+    getWorks();
     getUsers();
     getAboutText();
     getMessages();
@@ -71,6 +84,18 @@ export default function Admin() {
         headers: { "content-type": "application/json" }
       });
       let res = await req.json();
+    };
+    inner();
+  };
+
+  function postProject(value) {
+    async function inner() {
+      let req = await fetch("http://localhost:8000/api/works/post-works", {
+        method: "POST",
+        body: JSON.stringify(value),
+        headers: { "content-type": "application/json" }
+      });
+      let res = await req.json();
       console.log(res);
     };
     inner();
@@ -87,7 +112,11 @@ export default function Admin() {
       <AddWork
         openStatus={openAddWork}
         setOpenStatus={setOpenAddWork}
-        onButton={value => {}}
+        onButton={value => {
+          postProject(value);
+          setOpenAddWork(false);
+          $.addElement(value, setWorks);
+        }}
       />
       <div className="admin__modal" style={{ display:  openAddWork ? "none" : "block" }}>
         <div className="container">
@@ -141,30 +170,43 @@ export default function Admin() {
             <div className="admin__modal_tab portfolio" data-tab="portfolio" style={{ display: "none" }}>
               <div className="portfolio__categories">
                 <div className="portfolio__category">Имя проекта</div>
-                <div className="portfolio__category">Описание</div>
+                <div className="portfolio__category category">Описание</div>
                 <i class="fas fa-plus-circle" onClick={() => setOpenAddWork(true)}></i>
               </div>
               <div className="portfolio__inner">
                 <div className="portfolio__inner_scroll">
-                  <PortfolioWork
-                    id="0"
-                    text="YOOF сайт для помощи покупателю найти выгодное предложение для покупки"
-                    name="YOOF"
-                  />
+                  {
+                    works.map(work => {
+                      return (
+                        <PortfolioWork
+                          id={work._id}
+                          text={work.about}
+                          name={work.name}
+                        />
+                      );
+                    })
+                  }
                 </div>
               </div>
             </div>
             <div className="admin__modal_tab" data-tab="users" style={{ display: "none" }}>
               <div className="portfolio__categories">
                 <div className="portfolio__category">Имя пользователя</div>
-                <div className="portfolio__category" style={{ width: "70%", maxWidth: "67%" }}>Имейл</div>
+                <div className="portfolio__category category" style={{ width: "70%", maxWidth: "67%" }}>Имейл</div>
               </div>
               <div className="portfolio__inner">
                 <div className="portfolio__inner_scroll">
-                  <Account
-                    login="Владислав Зубченко"
-                    email="jsih1236@gmail.com"
-                  />
+                  {
+                    users.map(user => {
+                      return (
+                        <Account
+                          id={user._id}
+                          login={user.login}
+                          email={user.email}
+                        />
+                      );
+                    })
+                  }
                 </div>
               </div>
             </div>
