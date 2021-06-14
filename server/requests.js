@@ -3,6 +3,7 @@ const crypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const { user, pass } = require("./mailerConfig.js");
 const MongoId = require("mongodb").ObjectId;
+const fs = require("fs");
 
 const generateSalt = (gen = 10) => crypt.genSaltSync(gen);
 const hashPassword = (password, salt) => crypt.hashSync(password, salt);
@@ -21,6 +22,31 @@ function createAccount(login, password, email, token, salt) {
 async function sendEmail(transporter, object) {
   const { from, to, subject, text, html } = object;
   let result = await transporter.sendMail({ from, to, subject, text, html });
+};
+
+function createFile(name, prefix = "PHOTOS", callback = () => {}) {
+  fs.open(`./media/photos/${prefix}-${name}.txt`, "w", (err) => callback(err));
+};
+
+function readFile(name, callback = () => {}) {
+  fs.readFile(name, "utf8", (err, data) => callback(err, data));
+};
+
+function writeInFile(name, value) {
+  fs.writeFile(`./media/photos/${name}.txt`, value, (err) => {
+    if (err) console.log(err);
+  });
+};
+
+function deleteFile(name) {
+  fs.unlink(name, (err) => {
+    if (err) console.log(err);
+  });
+};
+
+function generateFileName() {
+  const date = new Date();
+  return `${createCode()}-${generateSalt(20)}${createCode()}^PHOTO^`;
 };
 
 async function requests(app, parser, collections) {
@@ -155,8 +181,9 @@ async function requests(app, parser, collections) {
     ABOUT API
   */
   app.get("/api/about/get-text", parser, (req, res) => about.find().toArray((err, result) => {
-    if (result[0] != undefined)  send(res, result[0])
+    if (result[0] != undefined) send(res, result[0])
   }));
+
   app.put("/api/about/put-text", parser, (req, res) => {
     const { text } = req.body;
     about.find().toArray((err, result) => {
@@ -167,26 +194,97 @@ async function requests(app, parser, collections) {
   /*///
     USERS API
   */
+
   app.get("/api/users/get-all-users", parser, (req, res) => users.find().toArray((err, result) => send(res, result)));
 
   /*///
     WORKS API
   */
-  app.get("/api/works/get-works", parser, (req, res) => works.find().toArray((err, result) => send(res, result)));
+
+  app.get("/api/works/get-works", parser, (req, res) => {
+    let convertData = [];
+
+    works.find().toArray((err, result) => {
+      result.forEach(r => {
+
+        let photos = [];
+        let titlePhoto = "";
+
+        const { _id, name, about, gitHubLink, hostingLink } = r;
+
+        readFile(r.titlePhoto, (err, data) => {
+          if (!err) titlePhoto = data;
+
+          r.photos.forEach(photo => {
+            readFile(photo, (err, data) => {
+              if (!err) photos = [...photos, data];
+              if (r.photos.length == photos.length) {
+                convertData = [...convertData, { _id: new MongoId(_id), name, about, gitHubLink, hostingLink, photos, titlePhoto }];
+              };
+              console.log(convertData.length, result.length);
+            });
+          });
+        });
+        if (convertData.length == result.length) {
+          console.log("WORK WORK WROK")
+          send(res, convertData);
+        };
+      });
+    });
+  });
 
   app.get("/api/works/get-works-by-id", parser, (req, res) => {
     const { id } = req.query;
     works.findOne({ _id: new MongoId(id) }, (err, result) => {
-      if (!err) send(res, result);
+
+      let convertData = {};
+      let titlePhoto = "";
+      let photos = [];
+
+      const { _id, name, about, gitHubLink, hostingLink } = result;
+
+      readFile(result.titlePhoto, (err, data) => {
+        titlePhoto = data;
+        result.photos.forEach(photo => {
+          console.log(photo);
+          readFile(photo, (err, data) => {
+            photos = [...photos, data];
+            if (photos.length == result.photos.length) {
+              convertData = { _id: new MongoId(_id), name, about, gitHubLink, hostingLink, photos, titlePhoto };
+              send(res, convertData);
+            };
+          });
+        });
+      });
     });
   });
 
   app.post("/api/works/post-works", parser, (req, res) => {
     const { titlePhoto, photos, name, about, gitHubLink, hostingLink } = req.body;
-    works.insertOne({
-      titlePhoto, photos, name, about, gitHubLink, hostingLink
+
+    let photosMassive = [];
+
+    let i = 0;
+
+    for (let photo of photos) {
+      const photoName = generateFileName();
+      createFile(photoName, "PHOTOS", (err) => {
+        writeInFile(`PHOTOS-${photoName}`, photo);
+        photosMassive = [...photosMassive, `./media/photos/PHOTOS-${photoName}.txt`];
+      });
+    };
+
+    const titlePhotoName = generateFileName();
+    createFile(titlePhotoName, "TITLE-PHOTO", (err) => {
+      writeInFile(`TITLE-PHOTO-${titlePhotoName}`, titlePhoto);
+
+      works.insertOne({
+        titlePhoto: `./media/photos/TITLE-PHOTO-${titlePhotoName}.txt`,
+        photos: photosMassive,
+        name, about, gitHubLink, hostingLink
+      });
+      send(res, "Work is added", 209);
     });
-    send(res, "Work is added", 209);
   });
 
   app.put("/api/works/put-works", parser, (req, res) => {

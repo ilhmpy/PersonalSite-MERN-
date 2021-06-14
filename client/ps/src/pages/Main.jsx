@@ -8,7 +8,7 @@ import Load from "../components/Load.jsx";
 
 export default function Main() {
   const [ aboutText, setAboutText ] = useState("");
-  const [ works, setWorks ] = useState([]);
+  const [ works, setWorks ] = useState(null);
 
   useEffect(() => {
     async function getAboutText() {
@@ -58,7 +58,7 @@ export default function Main() {
     inner();
   };
 
-  if (works.length > 0) {
+  if (works != null) {
     return (
       <div className="main">
         <div className="container">

@@ -20,8 +20,8 @@ export default function Admin() {
 
   const [ aboutText, setAboutText ] = useState("");
   const [ messages, setMessages ] = useState([]);
-  const [ works, setWorks ] = useState([]);
-  const [ users, setUsers ] = useState([]);
+  const [ works, setWorks ] = useState(null);
+  const [ users, setUsers ] = useState(null);
   const [ currentWorkEddit, setCurrentWorkEddit ] = useState([]);
 
   const refName = useRef(null);
@@ -127,7 +127,7 @@ export default function Admin() {
     };
   });
 
-  if (works.length > 0) {
+  if (works != null & users != null) {
     return (
       <div className="admin">
         <AddWork
